@@ -19,6 +19,7 @@ public class AttributeStackSelector implements StackElementSelector
                                                             "org.junit.jupiter.api.Test",
                                                             "org.junit.jupiter.api.TestFactory",
                                                             "org.junit.jupiter.api.RepeatedTest",
+                                                            "org.junit.jupiter.api.TestTemplate",
                                                             "org.junit.jupiter.params.ParameterizedTest"};
   private List<Class<? extends Annotation>> attributes;
   public AttributeStackSelector()

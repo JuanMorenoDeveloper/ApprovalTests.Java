@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.stream.Stream;
 
+import org.approvaltests.Approvals;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.extension.AfterEachCallback;
@@ -29,10 +30,13 @@ public class TestTemplateTest
   @ExtendWith(UserIdGeneratorTestInvocationContextProvider.class)
   public void whenUserIdRequested_thenUserIdIsReturnedInCorrectFormat(UserIdGeneratorTestCase testCase)
   {
-    UserIdGenerator userIdGenerator = new UserIdGeneratorImpl(testCase.isFeatureEnabled());
-    String actualUserId = userIdGenerator.generate(testCase.getFirstName(), testCase.getLastName());
-    Assertions.assertEquals(actualUserId, testCase.getExpectedUserId());
-    //        Approvals.verify(actualUserId);
+    try (NamedEnvironment ne = NamerFactory.withParameters(testCase.isFeatureEnabled))
+    {
+      final ApprovalNamer approvalNamer = Approvals.createApprovalNamer();
+      final String approvalName = approvalNamer.getApprovalName();
+      Assertions.assertEquals(approvalName,
+          "TestTemplateTest.whenUserIdRequested_thenUserIdIsReturnedInCorrectFormat." + testCase.isFeatureEnabled);
+    }
   }
   public static class DisabledOnQAEnvironmentExtension implements ExecutionCondition
   {
